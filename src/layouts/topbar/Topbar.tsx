@@ -1,5 +1,6 @@
-import { Bell, ChevronDown, Moon, Sun, Menu } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import { NotificationsDropdown } from "./NotificationsDropdown";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -37,7 +38,9 @@ export function Topbar({ onToggleSidebar, isSidebarCollapsed }: TopbarProps) {
         <button
           onClick={onToggleSidebar}
           className="p-2 -ml-2 text-ink-muted hover:text-ink hover:bg-surface rounded-sm transition-all duration-200 cursor-pointer"
-          aria-label={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+          aria-label={
+            isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"
+          }
           title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           <Menu className="w-5 h-5" />
@@ -60,10 +63,7 @@ export function Topbar({ onToggleSidebar, isSidebarCollapsed }: TopbarProps) {
         </button>
 
         {/* Notification Icon */}
-        <button className="p-2 text-ink-muted hover:text-ink hover:bg-surface rounded-sm transition-all duration-200 cursor-pointer relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-status-absent rounded-full ring-2 ring-surface-raised" />
-        </button>
+        <NotificationsDropdown />
 
         {/* Vertical divider */}
         <div className="h-6 w-px bg-ink-muted/15" />
@@ -84,8 +84,6 @@ export function Topbar({ onToggleSidebar, isSidebarCollapsed }: TopbarProps) {
               Engineering Lead
             </span>
           </div>
-
-          <ChevronDown className="w-4 h-4 text-ink-muted group-hover:text-ink transition-colors hidden md:block" />
         </div>
       </div>
     </header>

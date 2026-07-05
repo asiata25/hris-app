@@ -56,5 +56,16 @@ export interface Announcement {
   category: string; // e.g. "Engineering", "Social", "Security", "Policy", "Company"
 }
 
+export interface Notification {
+  id: string;
+  type: "leave" | "announcement";
+  title: string;
+  description: string;
+  timeAgo: string; // e.g. "2h ago", "Yesterday"
+  isRead: boolean;
+  linkTo?: string;
+}
+
+
 
 

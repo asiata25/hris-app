@@ -1,4 +1,4 @@
-import type { Employee, AttendanceRecord, AttendanceStatus, LeaveBalance, LeaveRequest, Announcement } from "@/types";
+import type { Employee, AttendanceRecord, AttendanceStatus, LeaveBalance, LeaveRequest, Announcement, Notification } from "@/types";
 
 export const MOCK_EMPLOYEES: Employee[] = [
   {
@@ -350,7 +350,50 @@ export const initializeDb = () => {
   if (!localStorage.getItem("announcements")) {
     localStorage.setItem("announcements", JSON.stringify(MOCK_ANNOUNCEMENTS));
   }
+  if (!localStorage.getItem("notifications")) {
+    localStorage.setItem("notifications", JSON.stringify(MOCK_NOTIFICATIONS));
+  }
 };
+
+export const MOCK_NOTIFICATIONS: Notification[] = [
+  {
+    id: "notif_1",
+    type: "announcement",
+    title: "Q3 Hackathon: Building the Future of HR Tech",
+    description: "New: Q3 Hackathon registration is now open.",
+    timeAgo: "2h ago",
+    isRead: false,
+    linkTo: "/announcements/ann_1",
+  },
+  {
+    id: "notif_2",
+    type: "leave",
+    title: "Sick Leave Approved",
+    description: "Your Sick Leave request for Apr 6 has been approved.",
+    timeAgo: "Yesterday",
+    isRead: false,
+    linkTo: "/leave",
+  },
+  {
+    id: "notif_3",
+    type: "announcement",
+    title: "Annual Company Picnic & Team Building Details",
+    description: "New: Annual Company Picnic details updated.",
+    timeAgo: "4d ago",
+    isRead: true,
+    linkTo: "/announcements/ann_2",
+  },
+  {
+    id: "notif_4",
+    type: "leave",
+    title: "Annual Leave Approved",
+    description: "Your Annual Leave request for Jun 15 has been approved.",
+    timeAgo: "3w ago",
+    isRead: true,
+    linkTo: "/leave",
+  },
+];
+
 
 // Database Access Methods
 export const getEmployeesFromDb = (): Employee[] => {
@@ -473,11 +516,23 @@ export const getAnnouncementsFromDb = (): Announcement[] => {
   return MOCK_ANNOUNCEMENTS;
 };
 
+export const getNotificationsFromDb = (): Notification[] => {
+  initializeDb();
+  const data = localStorage.getItem("notifications");
+  return data ? JSON.parse(data) : MOCK_NOTIFICATIONS;
+};
+
+export const saveNotificationsToDb = (notifications: Notification[]) => {
+  localStorage.setItem("notifications", JSON.stringify(notifications));
+};
+
 export const resetDb = () => {
   localStorage.removeItem("employees");
   localStorage.removeItem("attendance");
   localStorage.removeItem("leaveBalances");
   localStorage.removeItem("leaveRequests");
   localStorage.removeItem("announcements");
+  localStorage.removeItem("notifications");
   initializeDb();
 };
+
