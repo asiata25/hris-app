@@ -4,6 +4,7 @@ import HomeDashboard from "@/features/home/HomeDashboard";
 import TeamDirectory from "@/features/team/TeamDirectory";
 import AttendanceDashboard from "@/features/attendance/AttendanceDashboard";
 import LeaveDashboard from "@/features/leave/LeaveDashboard";
+import NewLeaveRequest from "@/features/leave/NewLeaveRequest";
 import PrivacyTerms from "@/features/support/PrivacyTerms";
 import Contact from "@/features/support/Contact";
 import ReportBug from "@/features/support/ReportBug";
@@ -28,7 +29,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "leave",
-        element: <LeaveDashboard />,
+        children: [
+          {
+            index: true,
+            element: <LeaveDashboard />,
+          },
+          {
+            path: "new",
+            element: <NewLeaveRequest />,
+          },
+        ],
       },
       {
         path: "privacy-terms",

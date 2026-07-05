@@ -256,6 +256,36 @@ export const MOCK_LEAVE_REQUESTS: LeaveRequest[] = [
     status: "approved",
     createdAt: "2026-02-09T14:00:00Z",
   },
+  {
+    id: "lr_5",
+    employeeId: "1", // Dianne Russell
+    leaveType: "annual",
+    startDate: "2026-07-12",
+    endDate: "2026-07-16",
+    reason: "Attending Design Week conference in Paris",
+    status: "pending",
+    createdAt: "2026-07-04T10:00:00Z",
+  },
+  {
+    id: "lr_6",
+    employeeId: "3", // Arlene McCoy
+    leaveType: "sick",
+    startDate: "2026-07-06",
+    endDate: "2026-07-07",
+    reason: "Wisdom tooth extraction surgery",
+    status: "pending",
+    createdAt: "2026-07-05T08:15:00Z",
+  },
+  {
+    id: "lr_7",
+    employeeId: "5", // Cody Fisher
+    leaveType: "unpaid",
+    startDate: "2026-07-20",
+    endDate: "2026-07-24",
+    reason: "Moving into new apartment and setting up utilities",
+    status: "pending",
+    createdAt: "2026-07-05T11:00:00Z",
+  },
 ];
 
 // Seeding function

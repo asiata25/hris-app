@@ -2,7 +2,15 @@ import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { Bug, AlertTriangle, Upload, X, CheckCircle2, FileImage, Terminal } from "lucide-react";
+import {
+  Bug,
+  AlertTriangle,
+  Upload,
+  X,
+  CheckCircle2,
+  FileImage,
+  Terminal,
+} from "lucide-react";
 import { useNavigate } from "react-router";
 
 type Severity = "low" | "medium" | "high" | "critical";
@@ -15,16 +23,34 @@ export default function ReportBug() {
   const [steps, setSteps] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
-  
+
   // Drag and drop mock files
-  const [attachments, setAttachments] = useState<{ name: string; size: string }[]>([]);
+  const [attachments, setAttachments] = useState<
+    { name: string; size: string }[]
+  >([]);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const severityConfigs = {
-    low: { label: "Low", variant: "present" as const, desc: "Minor UI glitch or formatting issue" },
-    medium: { label: "Medium", variant: "pending" as const, desc: "Feature behaves unexpectedly but has workaround" },
-    high: { label: "High", variant: "absent" as const, desc: "Core feature broken or unusable" },
-    critical: { label: "Critical", variant: "absent" as const, desc: "Application crash, data loss, or security issue" },
+    low: {
+      label: "Low",
+      variant: "present" as const,
+      desc: "Minor UI glitch or formatting issue",
+    },
+    medium: {
+      label: "Medium",
+      variant: "pending" as const,
+      desc: "Feature behaves unexpectedly but has workaround",
+    },
+    high: {
+      label: "High",
+      variant: "absent" as const,
+      desc: "Core feature broken or unusable",
+    },
+    critical: {
+      label: "Critical",
+      variant: "absent" as const,
+      desc: "Application crash, data loss, or security issue",
+    },
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +89,8 @@ export default function ReportBug() {
           Report a Portal Bug
         </h2>
         <p className="text-ink-muted font-body text-sm mt-1">
-          Spotted an error, lag, or incorrect calculation? Describe the behavior and submit a report to help us improve.
+          Spotted an error, lag, or incorrect calculation? Describe the behavior
+          and submit a report to help us improve.
         </p>
       </div>
 
@@ -73,16 +100,23 @@ export default function ReportBug() {
             <CheckCircle2 className="w-10 h-10" />
           </div>
           <div className="space-y-3">
-            <h3 className="font-display font-bold text-2xl text-ink">Bug Report Submitted</h3>
+            <h3 className="font-display font-bold text-2xl text-ink">
+              Bug Report Submitted
+            </h3>
             <p className="text-sm text-ink-muted leading-relaxed">
-              Thank you for reporting this issue. A tracking ticket has been created and assigned to our platform engineering squad.
+              Thank you for reporting this issue. A tracking ticket has been
+              created and assigned to our platform engineering squad.
             </p>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-surface border border-ink-muted/10 rounded-md mt-2">
-              <span className="text-xs text-ink-muted font-mono font-medium">Ticket ID:</span>
-              <span className="text-sm text-accent font-mono font-bold tracking-wider">{submittedId}</span>
+              <span className="text-xs text-ink-muted font-mono font-medium">
+                Ticket ID:
+              </span>
+              <span className="text-sm text-accent font-mono font-bold tracking-wider">
+                {submittedId}
+              </span>
             </div>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center pt-2">
             <Button
               variant="primary"
@@ -118,28 +152,46 @@ export default function ReportBug() {
                 Guidelines
               </h3>
               <ul className="text-xs text-ink-muted space-y-2.5 list-disc list-inside">
-                <li>Check if the bug disappears after performing a page reload.</li>
-                <li>Provide specific actions that lead to the incorrect behavior.</li>
-                <li>Low/Medium severity covers cosmetic and minor UI workflow problems.</li>
-                <li>High/Critical levels are for failures blocking work operations.</li>
+                <li>
+                  Check if the bug disappears after performing a page reload.
+                </li>
+                <li>
+                  Provide specific actions that lead to the incorrect behavior.
+                </li>
+                <li>
+                  Low/Medium severity covers cosmetic and minor UI workflow
+                  problems.
+                </li>
+                <li>
+                  High/Critical levels are for failures blocking work
+                  operations.
+                </li>
                 <li>Attach a screenshot if the glitch is visual in nature.</li>
               </ul>
             </Card>
 
             <div className="bg-surface-raised border border-ink-muted/10 p-5 rounded-md space-y-3">
-              <h4 className="text-xs font-semibold text-ink uppercase tracking-wider">Bug Resolution Times</h4>
+              <h4 className="text-xs font-semibold text-ink uppercase tracking-wider">
+                Bug Resolution Times
+              </h4>
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-ink-muted">Critical Issues:</span>
-                  <span className="font-semibold text-status-absent">&lt; 4 hours</span>
+                  <span className="font-semibold text-status-absent">
+                    &lt; 4 hours
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-ink-muted">High Issues:</span>
-                  <span className="font-semibold text-status-absent">&lt; 24 hours</span>
+                  <span className="font-semibold text-status-absent">
+                    &lt; 24 hours
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-ink-muted">Medium & Low:</span>
-                  <span className="font-semibold text-ink-muted">Next release cycle</span>
+                  <span className="font-semibold text-ink-muted">
+                    Next release cycle
+                  </span>
                 </div>
               </div>
             </div>
@@ -151,7 +203,10 @@ export default function ReportBug() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Bug Title */}
                 <div>
-                  <label htmlFor="title" className="text-xs font-semibold text-ink block mb-1.5">
+                  <label
+                    htmlFor="title"
+                    className="text-xs font-semibold text-ink block mb-1.5"
+                  >
                     Issue Title / Short Description
                   </label>
                   <input
@@ -171,40 +226,47 @@ export default function ReportBug() {
                     Severity Level
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(Object.keys(severityConfigs) as Severity[]).map((level) => {
-                      const cfg = severityConfigs[level];
-                      const isSelected = severity === level;
-                      return (
-                        <button
-                          key={level}
-                          type="button"
-                          onClick={() => setSeverity(level)}
-                          className={`p-3 rounded-sm border text-left transition-all cursor-pointer flex flex-col gap-1.5 ${
-                            isSelected
-                              ? "bg-accent/5 border-accent shadow-sm"
-                              : "bg-surface-raised border-ink-muted/15 hover:bg-surface/50"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between w-full">
-                            <span className="text-xs font-bold text-ink uppercase tracking-wide">
-                              {cfg.label}
+                    {(Object.keys(severityConfigs) as Severity[]).map(
+                      (level) => {
+                        const cfg = severityConfigs[level];
+                        const isSelected = severity === level;
+                        return (
+                          <button
+                            key={level}
+                            type="button"
+                            onClick={() => setSeverity(level)}
+                            className={`p-3 rounded-sm border text-left transition-all cursor-pointer flex flex-col gap-1.5 ${
+                              isSelected
+                                ? "bg-accent/5 border-accent shadow-sm"
+                                : "bg-surface-raised border-ink-muted/15 hover:bg-surface/50"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="text-xs font-bold text-ink uppercase tracking-wide">
+                                {cfg.label}
+                              </span>
+                              <Badge variant={cfg.variant}>
+                                {level === "low" || level === "medium"
+                                  ? "Standard"
+                                  : "Priority"}
+                              </Badge>
+                            </div>
+                            <span className="text-[11px] text-ink-muted leading-tight">
+                              {cfg.desc}
                             </span>
-                            <Badge variant={cfg.variant}>
-                              {level === "low" || level === "medium" ? "Standard" : "Priority"}
-                            </Badge>
-                          </div>
-                          <span className="text-[11px] text-ink-muted leading-tight">
-                            {cfg.desc}
-                          </span>
-                        </button>
-                      );
-                    })}
+                          </button>
+                        );
+                      },
+                    )}
                   </div>
                 </div>
 
                 {/* Bug Description */}
                 <div>
-                  <label htmlFor="desc" className="text-xs font-semibold text-ink block mb-1.5">
+                  <label
+                    htmlFor="desc"
+                    className="text-xs font-semibold text-ink block mb-1.5"
+                  >
                     What happens? (Observed Behavior)
                   </label>
                   <textarea
@@ -220,7 +282,10 @@ export default function ReportBug() {
 
                 {/* Steps to Reproduce */}
                 <div>
-                  <label htmlFor="steps" className="text-xs font-semibold text-ink block mb-1.5 flex items-center gap-1">
+                  <label
+                    htmlFor="steps"
+                    className="text-xs font-semibold text-ink mb-1.5 flex items-center gap-1"
+                  >
                     <Terminal className="w-3.5 h-3.5 text-ink-muted" />
                     Steps to Reproduce (Optional)
                   </label>
@@ -230,7 +295,7 @@ export default function ReportBug() {
                     value={steps}
                     onChange={(e) => setSteps(e.target.value)}
                     placeholder="1. Navigate to 'Leave' dashboard&#10;2. Click on 'Annual Leave' progress bar&#10;3. ObserveNaN showing..."
-                    className="w-full bg-surface border border-ink-muted/20 text-ink rounded-sm px-3.5 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-accent placeholder-ink-muted/40 font-mono text-xs resize-none"
+                    className="w-full bg-surface border border-ink-muted/20 text-ink rounded-sm px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-accent placeholder-ink-muted/40 font-mono text-xs resize-none"
                   />
                 </div>
 
@@ -249,10 +314,12 @@ export default function ReportBug() {
                       e.preventDefault();
                       setIsDragOver(false);
                       if (e.dataTransfer.files) {
-                        const filesArr = Array.from(e.dataTransfer.files).map((f) => ({
-                          name: f.name,
-                          size: (f.size / 1024).toFixed(1) + " KB",
-                        }));
+                        const filesArr = Array.from(e.dataTransfer.files).map(
+                          (f) => ({
+                            name: f.name,
+                            size: (f.size / 1024).toFixed(1) + " KB",
+                          }),
+                        );
                         setAttachments((prev) => [...prev, ...filesArr]);
                       }
                     }}
@@ -270,11 +337,19 @@ export default function ReportBug() {
                       onChange={handleFileUpload}
                       className="hidden"
                     />
-                    <label htmlFor="screenshot" className="cursor-pointer block space-y-2">
+                    <label
+                      htmlFor="screenshot"
+                      className="cursor-pointer block space-y-2"
+                    >
                       <Upload className="w-8 h-8 text-ink-muted/60 mx-auto" />
                       <div>
-                        <span className="text-xs font-semibold text-accent hover:underline">Click to upload</span>
-                        <span className="text-xs text-ink-muted"> or drag & drop files here</span>
+                        <span className="text-xs font-semibold text-accent hover:underline">
+                          Click to upload
+                        </span>
+                        <span className="text-xs text-ink-muted">
+                          {" "}
+                          or drag & drop files here
+                        </span>
                       </div>
                       <p className="text-[10px] text-ink-muted/65">
                         Supports PNG, JPG, or WEBP up to 5MB (Simulated)
@@ -292,8 +367,12 @@ export default function ReportBug() {
                         >
                           <div className="flex items-center gap-2 text-ink">
                             <FileImage className="w-4 h-4 text-accent shrink-0" />
-                            <span className="truncate font-medium max-w-xs">{file.name}</span>
-                            <span className="text-[10px] text-ink-muted">({file.size})</span>
+                            <span className="truncate font-medium max-w-xs">
+                              {file.name}
+                            </span>
+                            <span className="text-[10px] text-ink-muted">
+                              ({file.size})
+                            </span>
                           </div>
                           <button
                             type="button"
