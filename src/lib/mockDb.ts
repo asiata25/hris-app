@@ -1,4 +1,4 @@
-import type { Employee, AttendanceRecord, AttendanceStatus } from "@/types";
+import type { Employee, AttendanceRecord, AttendanceStatus, LeaveBalance, LeaveRequest } from "@/types";
 
 export const MOCK_EMPLOYEES: Employee[] = [
   {
@@ -209,6 +209,55 @@ const generateInitialAttendance = (): AttendanceRecord[] => {
   return records;
 };
 
+export const MOCK_LEAVE_BALANCES: LeaveBalance[] = [
+  { leaveType: "annual", allocated: 12, used: 8 },
+  { leaveType: "sick", allocated: 6, used: 2 },
+  { leaveType: "unpaid", allocated: 10, used: 1 },
+];
+
+export const MOCK_LEAVE_REQUESTS: LeaveRequest[] = [
+  {
+    id: "lr_1",
+    employeeId: CURRENT_USER_ID,
+    leaveType: "annual",
+    startDate: "2026-05-12",
+    endDate: "2026-05-14",
+    reason: "Family vacation",
+    status: "approved",
+    createdAt: "2026-05-01T10:00:00Z",
+  },
+  {
+    id: "lr_2",
+    employeeId: CURRENT_USER_ID,
+    leaveType: "annual",
+    startDate: "2026-06-15",
+    endDate: "2026-06-19",
+    reason: "Summer holiday",
+    status: "approved",
+    createdAt: "2026-06-01T09:30:00Z",
+  },
+  {
+    id: "lr_3",
+    employeeId: CURRENT_USER_ID,
+    leaveType: "sick",
+    startDate: "2026-04-06",
+    endDate: "2026-04-07",
+    reason: "Flu and fever",
+    status: "approved",
+    createdAt: "2026-04-06T08:00:00Z",
+  },
+  {
+    id: "lr_4",
+    employeeId: CURRENT_USER_ID,
+    leaveType: "unpaid",
+    startDate: "2026-02-10",
+    endDate: "2026-02-10",
+    reason: "Personal urgent matter",
+    status: "approved",
+    createdAt: "2026-02-09T14:00:00Z",
+  },
+];
+
 // Seeding function
 export const initializeDb = () => {
   if (typeof window === "undefined") return;
@@ -218,6 +267,12 @@ export const initializeDb = () => {
   }
   if (!localStorage.getItem("attendance")) {
     localStorage.setItem("attendance", JSON.stringify(generateInitialAttendance()));
+  }
+  if (!localStorage.getItem("leaveBalances")) {
+    localStorage.setItem("leaveBalances", JSON.stringify(MOCK_LEAVE_BALANCES));
+  }
+  if (!localStorage.getItem("leaveRequests")) {
+    localStorage.setItem("leaveRequests", JSON.stringify(MOCK_LEAVE_REQUESTS));
   }
 };
 
@@ -290,8 +345,48 @@ export const checkOutUser = (date: string, checkOutTime: string, workHours: stri
   return record || attendance[attendance.length - 1];
 };
 
+export const getLeaveBalancesFromDb = (): LeaveBalance[] => {
+  initializeDb();
+  const data = localStorage.getItem("leaveBalances");
+  return data ? JSON.parse(data) : MOCK_LEAVE_BALANCES;
+};
+
+export const getLeaveRequestsFromDb = (): LeaveRequest[] => {
+  initializeDb();
+  const data = localStorage.getItem("leaveRequests");
+  return data ? JSON.parse(data) : MOCK_LEAVE_REQUESTS;
+};
+
+export const calculateDateDiff = (startDateStr: string, endDateStr: string): number => {
+  const start = new Date(startDateStr + "T00:00:00");
+  const end = new Date(endDateStr + "T00:00:00");
+  const diffTime = end.getTime() - start.getTime();
+  return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24))) + 1;
+};
+
+export const saveLeaveRequestsToDb = (requests: LeaveRequest[]) => {
+  localStorage.setItem("leaveRequests", JSON.stringify(requests));
+  
+  // Dynamically update the leave balances used values based on approved requests
+  const balances = getLeaveBalancesFromDb();
+  const userRequests = requests.filter(r => r.employeeId === CURRENT_USER_ID && r.status === "approved");
+  
+  const updatedBalances = balances.map(balance => {
+    const matchingRequests = userRequests.filter(r => r.leaveType === balance.leaveType);
+    const usedDays = matchingRequests.reduce((sum, r) => sum + calculateDateDiff(r.startDate, r.endDate), 0);
+    return {
+      ...balance,
+      used: usedDays
+    };
+  });
+  
+  localStorage.setItem("leaveBalances", JSON.stringify(updatedBalances));
+};
+
 export const resetDb = () => {
   localStorage.removeItem("employees");
   localStorage.removeItem("attendance");
+  localStorage.removeItem("leaveBalances");
+  localStorage.removeItem("leaveRequests");
   initializeDb();
 };

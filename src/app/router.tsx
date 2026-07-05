@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import TeamDirectory from "@/features/team/TeamDirectory";
 import AttendanceDashboard from "@/features/attendance/AttendanceDashboard";
+import LeaveDashboard from "@/features/leave/LeaveDashboard";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -174,16 +175,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "leave",
-        element: (
-          <div className="space-y-6 animate-fadeIn">
-            <h2 className="text-2xl font-bold font-display text-ink">Leave Summary</h2>
-            <Card>
-              <p className="text-ink-muted font-body text-sm">
-                Used/remaining leave count summaries and request forms — coming soon in Phase 1.
-              </p>
-            </Card>
-          </div>
-        ),
+        element: <LeaveDashboard />,
       },
       {
         path: "*",

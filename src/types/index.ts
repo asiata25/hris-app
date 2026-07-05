@@ -28,3 +28,23 @@ export interface AttendanceRecord {
   notes?: string;
 }
 
+export type LeaveType = "annual" | "sick" | "unpaid";
+
+export interface LeaveBalance {
+  leaveType: LeaveType;
+  allocated: number;
+  used: number;
+}
+
+export interface LeaveRequest {
+  id: string;
+  employeeId: string;
+  leaveType: LeaveType;
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
+  reason: string;
+  status: "approved" | "pending" | "rejected";
+  createdAt: string;
+}
+
+
