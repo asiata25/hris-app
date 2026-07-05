@@ -3,6 +3,10 @@ import { useNavigate } from "react-router";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { SelectDropdown } from "@/components/ui/SelectDropdown";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { TextArea } from "@/components/ui/TextArea";
 
 import {
   getLeaveBalancesFromDb,
@@ -15,7 +19,7 @@ import type { LeaveType, LeaveRequest } from "@/types";
 
 export default function NewLeaveRequest() {
   const navigate = useNavigate();
-  
+
   const [leaveType, setLeaveType] = useState<LeaveType | "">("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -34,7 +38,7 @@ export default function NewLeaveRequest() {
     const syncState = () => {
       setBalances(getLeaveBalancesFromDb());
     };
-    
+
     window.addEventListener("storage", syncState);
     return () => window.removeEventListener("storage", syncState);
   }, []);
@@ -43,8 +47,6 @@ export default function NewLeaveRequest() {
     const bal = balances.find((b) => b.leaveType === type);
     return bal ? Math.max(0, bal.allocated - bal.used) : 0;
   };
-
-
 
   const validate = (): boolean => {
     const newErrors: typeof errors = {};
@@ -74,7 +76,8 @@ export default function NewLeaveRequest() {
     if (!reason.trim()) {
       newErrors.reason = "Reason is required.";
     } else if (reason.trim().length < 5) {
-      newErrors.reason = "Please provide a more detailed reason (minimum 5 characters).";
+      newErrors.reason =
+        "Please provide a more detailed reason (minimum 5 characters).";
     }
 
     setErrors(newErrors);
@@ -109,6 +112,22 @@ export default function NewLeaveRequest() {
     }, 1000);
   };
 
+  const leaveTypeOptions = [
+    { value: "", label: "Select a leave category" },
+    {
+      value: "annual",
+      label: `Annual Leave (${getRemaining("annual")} days remaining)`,
+    },
+    {
+      value: "sick",
+      label: `Sick Leave (${getRemaining("sick")} days remaining)`,
+    },
+    {
+      value: "unpaid",
+      label: `Unpaid Leave (${getRemaining("unpaid")} days remaining)`,
+    },
+  ];
+
   return (
     <div className="max-w-xl mx-auto py-4 md:py-6 space-y-6 animate-fadeIn">
       {/* Back Button and Header */}
@@ -123,11 +142,10 @@ export default function NewLeaveRequest() {
         </button>
 
         <div>
-          <h2 className="text-2xl font-bold font-display text-ink tracking-tight">
-            New Leave Request
-          </h2>
+          <PageHeader>New Leave Request</PageHeader>
           <p className="text-sm text-ink-muted mt-1 font-body">
-            Please fill out the form below. Focus on submitting a single, accurate request.
+            Please fill out the form below. Focus on submitting a single,
+            accurate request.
           </p>
         </div>
       </div>
@@ -136,44 +154,22 @@ export default function NewLeaveRequest() {
       <Card className="shadow-md">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 1. Leave Type Selector */}
-          <div>
-            <label
-              htmlFor="leaveType"
-              className="block text-xs font-bold text-ink uppercase tracking-wider font-body mb-2"
-            >
-              Leave Type
-            </label>
-            <select
-              id="leaveType"
-              value={leaveType}
-              onChange={(e) => {
-                setLeaveType(e.target.value as LeaveType);
-                if (errors.leaveType) {
-                  setErrors((prev) => ({ ...prev, leaveType: undefined }));
-                }
-                if (errors.endDate?.includes("exceeds")) {
-                  setErrors((prev) => ({ ...prev, endDate: undefined }));
-                }
-              }}
-              className="w-full bg-surface-raised border border-ink-muted/20 text-ink rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent font-body transition-colors cursor-pointer"
-            >
-              <option value="">Select a leave category</option>
-              <option value="annual">
-                Annual Leave ({getRemaining("annual")} days remaining)
-              </option>
-              <option value="sick">
-                Sick Leave ({getRemaining("sick")} days remaining)
-              </option>
-              <option value="unpaid">
-                Unpaid Leave ({getRemaining("unpaid")} days remaining)
-              </option>
-            </select>
-            {errors.leaveType && (
-              <p className="text-status-absent text-xs font-semibold font-body mt-1 animate-fadeIn">
-                {errors.leaveType}
-              </p>
-            )}
-          </div>
+          <SelectDropdown
+            id="leaveType"
+            label="Leave Type"
+            value={leaveType}
+            onChange={(e) => {
+              setLeaveType(e.target.value as LeaveType);
+              if (errors.leaveType) {
+                setErrors((prev) => ({ ...prev, leaveType: undefined }));
+              }
+              if (errors.endDate?.includes("exceeds")) {
+                setErrors((prev) => ({ ...prev, endDate: undefined }));
+              }
+            }}
+            options={leaveTypeOptions}
+            error={errors.leaveType}
+          />
 
           {/* 2. Coupled Date Section */}
           <div className="bg-surface border border-ink-muted/10 rounded-sm p-4 space-y-3">
@@ -181,87 +177,50 @@ export default function NewLeaveRequest() {
               When will you be away?
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="startDate"
-                  className="block text-xs font-medium text-ink-muted mb-1 font-body"
-                >
-                  Start Date
-                </label>
-                <input
-                  type="date"
-                  id="startDate"
-                  value={startDate}
-                  onChange={(e) => {
-                    setStartDate(e.target.value);
-                    if (errors.startDate) {
-                      setErrors((prev) => ({ ...prev, startDate: undefined }));
-                    }
-                  }}
-                  className="w-full bg-surface-raised border border-ink-muted/20 text-ink rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent font-body transition-colors"
-                />
-                {errors.startDate && (
-                  <p className="text-status-absent text-xs font-semibold font-body mt-1 animate-fadeIn">
-                    {errors.startDate}
-                  </p>
-                )}
-              </div>
+              <DatePicker
+                id="startDate"
+                label="Start Date"
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  if (errors.startDate) {
+                    setErrors((prev) => ({ ...prev, startDate: undefined }));
+                  }
+                }}
+                error={errors.startDate}
+              />
 
-              <div>
-                <label
-                  htmlFor="endDate"
-                  className="block text-xs font-medium text-ink-muted mb-1 font-body"
-                >
-                  End Date
-                </label>
-                <input
-                  type="date"
-                  id="endDate"
-                  value={endDate}
-                  onChange={(e) => {
-                    setEndDate(e.target.value);
-                    if (errors.endDate) {
-                      setErrors((prev) => ({ ...prev, endDate: undefined }));
-                    }
-                  }}
-                  className="w-full bg-surface-raised border border-ink-muted/20 text-ink rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent font-body transition-colors"
-                />
-                {errors.endDate && (
-                  <p className="text-status-absent text-xs font-semibold font-body mt-1 animate-fadeIn">
-                    {errors.endDate}
-                  </p>
-                )}
-              </div>
+              <DatePicker
+                id="endDate"
+                label="End Date"
+                value={endDate}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                  if (errors.endDate) {
+                    setErrors((prev) => ({ ...prev, endDate: undefined }));
+                  }
+                }}
+                error={errors.endDate}
+              />
             </div>
           </div>
 
           {/* 3. Reason Textarea */}
-          <div>
-            <label
-              htmlFor="reason"
-              className="block text-xs font-bold text-ink uppercase tracking-wider font-body mb-2"
-            >
-              Reason
-            </label>
-            <textarea
-              id="reason"
-              rows={4}
-              value={reason}
-              onChange={(e) => {
-                setReason(e.target.value);
-                if (errors.reason) {
-                  setErrors((prev) => ({ ...prev, reason: undefined }));
-                }
-              }}
-              placeholder="Describe the context for your absence..."
-              className="w-full bg-surface-raised border border-ink-muted/20 text-ink rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent font-body transition-colors resize-y text-area-min-h"
-            />
-            {errors.reason && (
-              <p className="text-status-absent text-xs font-semibold font-body mt-1 animate-fadeIn">
-                {errors.reason}
-              </p>
-            )}
-          </div>
+          <TextArea
+            id="reason"
+            label="Reason"
+            rows={4}
+            value={reason}
+            onChange={(e) => {
+              setReason(e.target.value);
+              if (errors.reason) {
+                setErrors((prev) => ({ ...prev, reason: undefined }));
+              }
+            }}
+            placeholder="Describe the context for your absence..."
+            error={errors.reason}
+            className="text-area-min-h"
+          />
 
           {/* 4. Full-width Submit Button */}
           <Button
@@ -281,7 +240,6 @@ export default function NewLeaveRequest() {
           </Button>
         </form>
       </Card>
-
     </div>
   );
 }

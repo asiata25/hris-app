@@ -1,5 +1,7 @@
 import { Search } from "lucide-react";
 import { Card } from "@/components/ui/Card";
+import { InputField } from "@/components/ui/InputField";
+import { SelectDropdown } from "@/components/ui/SelectDropdown";
 import type { FilterState } from "@/types";
 
 interface TeamFiltersProps {
@@ -15,69 +17,70 @@ export function TeamFilters({
   departments,
   roles,
 }: TeamFiltersProps) {
+  const deptOptions = [
+    { value: "", label: "All Departments" },
+    ...departments.map((d) => ({ value: d, label: d })),
+  ];
+
+  const roleOptions = [
+    { value: "", label: "All Roles" },
+    ...roles.map((r) => ({ value: r, label: r })),
+  ];
+
+  const statusOptions = [
+    { value: "", label: "All Statuses" },
+    { value: "active", label: "Active" },
+    { value: "inactive", label: "Inactive" },
+    { value: "on_leave", label: "On Leave" },
+  ];
+
   return (
-    <Card className="p-4">
+    <Card className="p-4 animate-fadeIn">
       <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
-        {/* Search Input takes visual priority */}
+        {/* Search Input */}
         <div className="relative grow">
-          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none z-10">
             <Search className="h-4.5 w-4.5 text-ink-muted" />
           </span>
-          <input
+          <InputField
             type="text"
             placeholder="Search by name, role, or department..."
             value={filters.searchQuery}
             onChange={(e) =>
               setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))
             }
-            className="w-full pl-10 pr-4 py-2 border border-ink-muted/15 rounded-sm bg-surface text-ink text-sm font-body placeholder-ink-muted/50 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+            className="pl-10"
           />
         </div>
 
-        {/* Department, Role, and Status Dropdowns */}
-        <div className="flex flex-wrap sm:flex-nowrap gap-3">
-          <select
+        {/* Dropdowns */}
+        <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
+          <SelectDropdown
             value={filters.department}
             onChange={(e) =>
               setFilters((prev) => ({ ...prev, department: e.target.value }))
             }
-            className="w-full sm:w-auto px-3.5 py-2 border border-ink-muted/15 rounded-sm bg-surface text-ink text-sm font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent cursor-pointer transition-all"
-          >
-            <option value="">All Departments</option>
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
+            options={deptOptions}
+            className="min-w-40"
+          />
 
-          <select
+          <SelectDropdown
             value={filters.role}
             onChange={(e) =>
               setFilters((prev) => ({ ...prev, role: e.target.value }))
             }
-            className="w-full sm:w-auto px-3.5 py-2 border border-ink-muted/15 rounded-sm bg-surface text-ink text-sm font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent cursor-pointer transition-all"
-          >
-            <option value="">All Roles</option>
-            {roles.map((role) => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
+            options={roleOptions}
+            className="min-w-40"
+          />
 
-          <select
+          <SelectDropdown
             value={filters.status}
             onChange={(e) =>
               setFilters((prev) => ({ ...prev, status: e.target.value }))
             }
-            className="w-full sm:w-auto px-3.5 py-2 border border-ink-muted/15 rounded-sm bg-surface text-ink text-sm font-body focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent cursor-pointer transition-all"
-          >
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="on_leave">On Leave</option>
-          </select>
+            options={statusOptions}
+            className="min-w-35"
+          />
         </div>
       </div>
     </Card>

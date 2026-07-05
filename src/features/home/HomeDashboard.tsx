@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getAttendanceFromDb, getEmployeesFromDb } from "@/lib/mockDb";
-import { AttendanceStatusCard } from "./components/AttendanceStatusCard";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { AttendanceStatusList } from "./components/AttendanceStatusList";
 import {
   HomeStatsCards,
   type HomeStats,
@@ -56,9 +57,7 @@ export default function HomeDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold font-display text-ink leading-tight">
-          Welcome back, Johannes
-        </h2>
+        <PageHeader>Welcome back, Johannes</PageHeader>
         <p className="text-sm text-ink-muted mt-1 font-body">
           Here's a quick overview of today's team status and action items.
         </p>
@@ -67,7 +66,9 @@ export default function HomeDashboard() {
       <HomeStatsCards stats={stats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <AttendanceStatusCard />
+        <div className="lg:col-span-2">
+          <AttendanceStatusList />
+        </div>
       </div>
     </div>
   );

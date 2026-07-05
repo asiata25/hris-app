@@ -5,6 +5,7 @@ import { TeamFilters } from "./components/TeamFilters";
 import { TeamTable } from "./components/TeamTable";
 import { EmptyState } from "./components/EmptyState";
 import { LoadingSkeleton } from "./components/LoadingSkeleton";
+import { PageHeader } from "@/components/ui/PageHeader";
 
 export default function TeamDirectory() {
   const mockEmployees = useMemo(() => getEmployeesFromDb(), []);
@@ -80,9 +81,7 @@ export default function TeamDirectory() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h2 className="text-2xl font-bold font-display text-ink leading-tight">
-          Team Directory
-        </h2>
+        <PageHeader>Team Directory</PageHeader>
         <p className="text-sm text-ink-muted mt-1 font-body">
           View, search, and manage organizational members and their status.
         </p>

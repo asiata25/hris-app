@@ -1,10 +1,11 @@
+import { useState } from "react";
 import type { Employee, AttendanceRecord } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Search, Building2 } from "lucide-react";
+import { Search, Building2, Calendar } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { PAST_DATES } from "@/lib/mockDb";
+import { WEEK_1_DATES, WEEK_2_DATES } from "@/lib/mockDb";
 import { formatDateLabel, getAvatarBg } from "@/utils/helpers";
 
 interface TeamHistoryTableProps {
@@ -28,10 +29,20 @@ export function TeamHistoryTable({
   departments,
   isLoading,
 }: TeamHistoryTableProps) {
+  const [selectedWeek, setSelectedWeek] = useState<"week1" | "week2">("week2");
+  const weekDates = selectedWeek === "week2" ? WEEK_2_DATES : WEEK_1_DATES;
+
+  // Helper to extract weekday
+  const getDayName = (dateStr: string): string => {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    const dateObj = new Date(year, month - 1, day);
+    return dateObj.toLocaleDateString("en-US", { weekday: "short" });
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate-fadeIn">
       {/* Filters bar */}
-      <div className="flex flex-col md:flex-row gap-4 justify-between bg-surface-raised p-4 rounded-md border border-ink-muted/10 shadow-sm">
+      <div className="flex flex-col xl:flex-row gap-4 justify-between bg-surface-raised p-4 rounded-md border border-ink-muted/10 shadow-sm">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
           <input
@@ -44,6 +55,21 @@ export function TeamHistoryTable({
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          {/* Week Selector Dropdown */}
+          <div className="relative flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-ink-muted" />
+            <select
+              value={selectedWeek}
+              onChange={(e) =>
+                setSelectedWeek(e.target.value as "week1" | "week2")
+              }
+              className="border border-ink-muted/20 rounded-md bg-surface px-3 py-2 text-sm text-ink focus:outline-none focus:border-accent font-body min-w-52.5 cursor-pointer"
+            >
+              <option value="week2">Jun 29 – Jul 05, 2026 (Weekly)</option>
+              <option value="week1">Jun 22 – Jun 28, 2026 (Weekly)</option>
+            </select>
+          </div>
+
           <div className="relative flex items-center gap-2">
             <Building2 className="w-4 h-4 text-ink-muted" />
             <select
@@ -98,12 +124,13 @@ export function TeamHistoryTable({
                   <th className="py-4.5 px-6 font-display min-w-50">
                     Employee
                   </th>
-                  {PAST_DATES.map((date) => (
+                  {weekDates.map((date) => (
                     <th
                       key={date}
                       className="py-4.5 px-4 text-center font-display min-w-25"
+                      title={formatDateLabel(date)}
                     >
-                      {formatDateLabel(date)}
+                      {getDayName(date)}
                     </th>
                   ))}
                 </tr>
@@ -139,7 +166,7 @@ export function TeamHistoryTable({
                       </div>
                     </td>
 
-                    {PAST_DATES.map((date) => {
+                    {weekDates.map((date) => {
                       const record = attendance.find(
                         (r) => r.employeeId === emp.id && r.date === date,
                       );
@@ -147,10 +174,7 @@ export function TeamHistoryTable({
                       return (
                         <td key={date} className="py-4 px-4 text-center">
                           {record ? (
-                            <Badge
-                              variant={record.status}
-                              title={record.notes}
-                            >
+                            <Badge variant={record.status} title={record.notes}>
                               {record.status === "present"
                                 ? "Present"
                                 : record.status === "absent"
@@ -161,7 +185,7 @@ export function TeamHistoryTable({
                             <Badge
                               variant="pending"
                               className="bg-ink-muted/10 text-ink-muted/60 border-none font-medium text-[10px]"
-                              title="No check-in record logged yet today"
+                              title="No check-in record logged yet"
                             >
                               Not In
                             </Badge>

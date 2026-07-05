@@ -1,23 +1,24 @@
-import { Clock, Play, Square, Info } from "lucide-react";
+import { Clock, Play, Square, Info, UserCheck, CalendarDays } from "lucide-react";
 import type { AttendanceRecord } from "@/types";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { MetricCard } from "@/components/ui/MetricCard";
 
-interface ShiftConsoleProps {
+interface LiveShiftConsoleProps {
   checkInState: "idle" | "checked_in" | "checked_out";
   currentUserTodayRecord?: AttendanceRecord;
   onCheckIn: () => void;
   onCheckOut: () => void;
 }
 
-export function ShiftConsole({
+export function LiveShiftConsole({
   checkInState,
   currentUserTodayRecord,
   onCheckIn,
   onCheckOut,
-}: ShiftConsoleProps) {
+}: LiveShiftConsoleProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fadeIn">
       {/* Interactive Check-In/Check-Out Console */}
       <Card className="lg:col-span-2 bg-surface-raised border border-ink-muted/10 flex flex-col justify-between p-6 relative overflow-hidden shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -104,29 +105,21 @@ export function ShiftConsole({
 
       {/* Trailing summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-        <Card className="flex flex-col justify-center p-5 shadow-sm">
-          <span className="text-xs font-semibold text-ink-muted uppercase tracking-wide">
-            Present Days
-          </span>
-          <div className="text-2xl font-bold font-display text-ink mt-1">
-            12 Days
-          </div>
-          <p className="text-[10px] text-ink-muted mt-1.5">
-            For this calendar month
-          </p>
-        </Card>
+        <MetricCard
+          title="Present Days"
+          value="12 Days"
+          subtext="For this calendar month"
+          icon={<UserCheck className="w-5 h-5 text-accent" />}
+          iconBgClass="bg-accent/10"
+        />
 
-        <Card className="flex flex-col justify-center p-5 shadow-sm">
-          <span className="text-xs font-semibold text-ink-muted uppercase tracking-wide">
-            Leaves Taken
-          </span>
-          <div className="text-2xl font-bold font-display text-ink mt-1">
-            1 Day
-          </div>
-          <p className="text-[10px] text-ink-muted mt-1.5">
-            Approved sick/casual leave
-          </p>
-        </Card>
+        <MetricCard
+          title="Leaves Taken"
+          value="1 Day"
+          subtext="Approved sick/casual leave"
+          icon={<CalendarDays className="w-5 h-5 text-status-pending" />}
+          iconBgClass="bg-status-pending/10"
+        />
       </div>
     </div>
   );

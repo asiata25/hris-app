@@ -4,6 +4,9 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Avatar } from "@/components/ui/Avatar";
 import {
   getLeaveBalancesFromDb,
   getLeaveRequestsFromDb,
@@ -12,19 +15,20 @@ import {
   CURRENT_USER_ID,
 } from "@/lib/mockDb";
 import type { LeaveBalance, LeaveRequest, Employee } from "@/types";
-import { LeaveSummaryCards } from "./components/LeaveSummaryCards";
+import { LeaveSummaryGrid } from "./components/LeaveSummaryGrid";
+import { RecentRequestsList } from "./components/RecentRequestsList";
 import { LeaveRequestDetailsModal } from "./components/LeaveRequestDetailsModal";
 
 export default function LeaveDashboard() {
   const navigate = useNavigate();
   const [balances, setBalances] = useState<LeaveBalance[]>(() =>
-    getLeaveBalancesFromDb(),
+    getLeaveBalancesFromDb()
   );
   const [recentRequests, setRecentRequests] = useState<LeaveRequest[]>([]);
   const [teamRequests, setTeamRequests] = useState<LeaveRequest[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<LeaveRequest | null>(
-    null,
+    null
   );
 
   const loadData = () => {
@@ -37,7 +41,7 @@ export default function LeaveDashboard() {
       .filter((r) => r.employeeId === CURRENT_USER_ID)
       .sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
     setRecentRequests(recent);
 
@@ -120,9 +124,7 @@ export default function LeaveDashboard() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold font-display text-ink tracking-tight">
-            Leave Dashboard
-          </h2>
+          <PageHeader>Leave Dashboard</PageHeader>
           <p className="text-sm text-ink-muted mt-1 font-body">
             Review your used and remaining balances for each leave category.
           </p>
@@ -139,62 +141,24 @@ export default function LeaveDashboard() {
 
       {/* Leave Summary Section */}
       <div className="space-y-3">
-        <div className="text-xs font-bold uppercase tracking-wider text-ink-muted font-body">
-          My Leave Summary
-        </div>
-        <LeaveSummaryCards balances={balances} />
+        <SectionHeader>My Leave Summary</SectionHeader>
+        <LeaveSummaryGrid balances={balances} />
       </div>
 
       {/* Lists Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
         {/* Left Column: Your Recent Requests */}
         <div className="space-y-4">
-          <div className="text-xs font-bold uppercase tracking-wider text-ink-muted font-body">
-            Your Recent Requests
-          </div>
-          {recentRequests.length === 0 ? (
-            <Card className="py-8 text-center bg-surface-raised border border-dashed border-ink-muted/15 rounded-sm">
-              <p className="text-sm text-ink-muted font-body">
-                No requests yet
-              </p>
-            </Card>
-          ) : (
-            <div className="bg-surface-raised rounded-md border border-ink-muted/10 text-ink font-body transition-all duration-200 shadow-sm overflow-hidden divide-y divide-ink-muted/10">
-              {recentRequests.map((req) => (
-                <div
-                  key={req.id}
-                  className="flex items-center justify-between p-4.5 hover:bg-surface/30 transition-colors"
-                >
-                  <div className="space-y-0.5">
-                    <span className="text-sm font-semibold text-ink font-body block capitalize">
-                      {req.leaveType} Leave
-                    </span>
-                    <span className="text-xs text-ink-muted font-body block">
-                      {formatDateRange(req.startDate, req.endDate)}
-                    </span>
-                  </div>
-                  <Badge
-                    variant={
-                      req.status === "approved"
-                        ? "present"
-                        : req.status === "rejected"
-                          ? "absent"
-                          : "pending"
-                    }
-                  >
-                    {req.status}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          )}
+          <SectionHeader>Your Recent Requests</SectionHeader>
+          <RecentRequestsList
+            requests={recentRequests}
+            formatDateRange={formatDateRange}
+          />
         </div>
 
         {/* Right Column: Upcoming Team Requests */}
         <div className="space-y-4">
-          <div className="text-xs font-bold uppercase tracking-wider text-ink-muted font-body">
-            Upcoming Team Requests
-          </div>
+          <SectionHeader>Upcoming Team Requests</SectionHeader>
           {teamRequests.length === 0 ? (
             <Card className="py-8 text-center bg-surface-raised border border-dashed border-ink-muted/15 rounded-sm">
               <p className="text-sm text-ink-muted font-body">
@@ -202,15 +166,9 @@ export default function LeaveDashboard() {
               </p>
             </Card>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 animate-fadeIn">
               {teamRequests.map((req) => {
                 const emp = getEmployeeInfo(req.employeeId);
-                const initials = emp.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .slice(0, 2);
-
                 return (
                   <button
                     key={req.id}
@@ -218,10 +176,7 @@ export default function LeaveDashboard() {
                     className="w-full text-left flex items-center justify-between p-3.5 bg-surface-raised border border-ink-muted/10 rounded-sm hover:border-ink-muted/20 hover:shadow-sm transition-all duration-200 cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
-                      {/* Avatar */}
-                      <div className="w-9 h-9 rounded-full bg-accent/10 text-accent flex items-center justify-center font-bold text-xs shrink-0 border border-accent/15">
-                        {initials}
-                      </div>
+                      <Avatar name={emp.name} size="md" />
                       <div className="space-y-0.5">
                         <span className="text-sm font-semibold text-ink font-body block">
                           {emp.name}

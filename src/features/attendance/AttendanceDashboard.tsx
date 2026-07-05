@@ -10,8 +10,9 @@ import {
 } from "@/lib/mockDb";
 import type { AttendanceRecord, Employee } from "@/types";
 import { cn } from "@/lib/cn";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { AttendanceStats } from "./components/AttendanceStats";
-import { ShiftConsole } from "./components/ShiftConsole";
+import { LiveShiftConsole } from "./components/LiveShiftConsole";
 import { TeamHistoryTable } from "./components/TeamHistoryTable";
 import { PersonalHistoryTable } from "./components/PersonalHistoryTable";
 import { formatCurrentTime, calculateWorkHours } from "@/utils/helpers";
@@ -20,7 +21,7 @@ export default function AttendanceDashboard() {
   const [viewMode, setViewMode] = useState<"team" | "personal">("personal");
   const [employees] = useState<Employee[]>(() => getEmployeesFromDb());
   const [attendance, setAttendance] = useState<AttendanceRecord[]>(() =>
-    getAttendanceFromDb(),
+    getAttendanceFromDb()
   );
 
   // Filter States (Team View)
@@ -43,7 +44,7 @@ export default function AttendanceDashboard() {
   // Current User's Attendance status for today
   const currentUserTodayRecord = useMemo(() => {
     return attendance.find(
-      (r) => r.employeeId === CURRENT_USER_ID && r.date === TODAY_DATE,
+      (r) => r.employeeId === CURRENT_USER_ID && r.date === TODAY_DATE
     );
   }, [attendance]);
 
@@ -67,7 +68,7 @@ export default function AttendanceDashboard() {
     const checkOutTime = formatCurrentTime();
     const workHours = calculateWorkHours(
       currentUserTodayRecord.checkIn,
-      checkOutTime,
+      checkOutTime
     );
     checkOutUser(TODAY_DATE, checkOutTime, workHours);
     setAttendance(getAttendanceFromDb());
@@ -88,23 +89,23 @@ export default function AttendanceDashboard() {
   const stats = useMemo(() => {
     const todayRecords = attendance.filter((r) => r.date === TODAY_DATE);
     const presentCount = todayRecords.filter(
-      (r) => r.status === "present",
+      (r) => r.status === "present"
     ).length;
     const absentCount = todayRecords.filter(
-      (r) => r.status === "absent",
+      (r) => r.status === "absent"
     ).length;
     const leaveCount = todayRecords.filter(
-      (r) => r.status === "pending",
+      (r) => r.status === "pending"
     ).length;
 
     // Remaining active employees who haven't checked in yet today
     const activeEmployeesCount = employees.filter(
-      (e) => e.status !== "inactive",
+      (e) => e.status !== "inactive"
     ).length;
     const checkedInCount = todayRecords.length;
     const pendingCheckInCount = Math.max(
       0,
-      activeEmployeesCount - checkedInCount,
+      activeEmployeesCount - checkedInCount
     );
 
     return {
@@ -141,9 +142,7 @@ export default function AttendanceDashboard() {
       {/* View Header with Mode Toggles */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold font-display text-ink tracking-tight">
-            Attendance Panel
-          </h2>
+          <PageHeader>Attendance Panel</PageHeader>
           <p className="text-sm text-ink-muted mt-1 font-body">
             {viewMode === "team"
               ? "Monitor company attendance metrics and weekly logs."
@@ -169,7 +168,7 @@ export default function AttendanceDashboard() {
                 "px-4 py-1.5 rounded-sm text-xs font-semibold font-body transition-all duration-200 cursor-pointer",
                 viewMode === "team"
                   ? "bg-accent text-white shadow-md shadow-accent/20"
-                  : "text-ink-muted hover:text-ink",
+                  : "text-ink-muted hover:text-ink"
               )}
             >
               Team Dashboard
@@ -180,7 +179,7 @@ export default function AttendanceDashboard() {
                 "px-4 py-1.5 rounded-sm text-xs font-semibold font-body transition-all duration-200 cursor-pointer",
                 viewMode === "personal"
                   ? "bg-accent text-white shadow-md shadow-accent/20"
-                  : "text-ink-muted hover:text-ink",
+                  : "text-ink-muted hover:text-ink"
               )}
             >
               My Attendance
@@ -198,7 +197,7 @@ export default function AttendanceDashboard() {
         {viewMode === "team" ? (
           <AttendanceStats stats={stats} />
         ) : (
-          <ShiftConsole
+          <LiveShiftConsole
             checkInState={checkInState}
             currentUserTodayRecord={currentUserTodayRecord}
             onCheckIn={handleCheckIn}

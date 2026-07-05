@@ -1,6 +1,7 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationsDropdown } from "./NotificationsDropdown";
+import { UserProfileWidget } from "./UserProfileWidget";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -69,23 +70,9 @@ export function Topbar({ onToggleSidebar, isSidebarCollapsed }: TopbarProps) {
         <div className="h-6 w-px bg-ink-muted/15" />
 
         {/* Profile Card */}
-        <div className="flex items-center gap-3 pl-1.5 select-none cursor-pointer group">
-          {/* Avatar */}
-          <div className="w-9 h-9 rounded-full bg-accent/15 text-accent flex items-center justify-center font-bold text-sm border border-accent/20 transition-transform group-hover:scale-105">
-            JK
-          </div>
-
-          {/* User Meta (hidden on mobile) */}
-          <div className="hidden md:flex flex-col text-left">
-            <span className="font-body font-semibold text-sm text-ink group-hover:text-accent transition-colors leading-none">
-              Johannes Kepler
-            </span>
-            <span className="font-body text-xs text-ink-muted leading-tight mt-0.5">
-              Engineering Lead
-            </span>
-          </div>
-        </div>
+        <UserProfileWidget name="Johannes Kepler" role="Engineering Lead" />
       </div>
     </header>
   );
 }
+

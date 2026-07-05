@@ -112,14 +112,36 @@ export const PAST_DATES = [
   "2026-07-05", // Sun (Today)
 ];
 
+export const WEEK_1_DATES = [
+  "2026-06-22",
+  "2026-06-23",
+  "2026-06-24",
+  "2026-06-25",
+  "2026-06-26",
+  "2026-06-27",
+  "2026-06-28",
+];
+
+export const WEEK_2_DATES = [
+  "2026-06-29",
+  "2026-06-30",
+  "2026-07-01",
+  "2026-07-02",
+  "2026-07-03",
+  "2026-07-04",
+  "2026-07-05",
+];
+
+const ALL_SEED_DATES = [...WEEK_1_DATES, ...WEEK_2_DATES];
+
 // Helper to generate seed attendance records
 const generateInitialAttendance = (): AttendanceRecord[] => {
   const records: AttendanceRecord[] = [];
   let recordId = 1;
 
-  // 1. Generate 7-day team attendance records (June 29 to July 5)
+  // 1. Generate 14-day team attendance records (June 22 to July 5)
   MOCK_EMPLOYEES.forEach((employee) => {
-    PAST_DATES.forEach((date) => {
+    ALL_SEED_DATES.forEach((date) => {
       // Don't generate today's attendance for the current user yet (unchecked by default)
       if (employee.id === CURRENT_USER_ID && date === "2026-07-05") {
         return;
@@ -147,7 +169,15 @@ const generateInitialAttendance = (): AttendanceRecord[] => {
       } else {
         // Active employee randomizations
         const hash = (parseInt(employee.id) * 31 + date.charCodeAt(date.length - 1)) % 10;
-        if (hash === 0) {
+        const isWeekend = date.endsWith("-06-27") || date.endsWith("-06-28") || date.endsWith("-07-04") || date.endsWith("-07-05");
+        
+        if (isWeekend) {
+          status = "absent";
+          checkIn = undefined;
+          checkOut = undefined;
+          workHours = undefined;
+          notes = "Weekend";
+        } else if (hash === 0) {
           status = "absent";
           checkIn = undefined;
           checkOut = undefined;
@@ -181,33 +211,9 @@ const generateInitialAttendance = (): AttendanceRecord[] => {
     });
   });
 
-  // 2. Generate detailed 14-day history specifically for the logged-in user (Johannes Kepler)
-  const userExtraDates = [
-    "2026-06-22",
-    "2026-06-23",
-    "2026-06-24",
-    "2026-06-25",
-    "2026-06-26",
-    "2026-06-27",
-    "2026-06-28",
-  ];
-
-  userExtraDates.forEach((date) => {
-    const isWeekend = date === "2026-06-27" || date === "2026-06-28";
-    records.push({
-      id: `att_${recordId++}`,
-      employeeId: CURRENT_USER_ID,
-      date,
-      status: isWeekend ? "absent" : "present",
-      checkIn: isWeekend ? undefined : "08:52 AM",
-      checkOut: isWeekend ? undefined : "05:40 PM",
-      workHours: isWeekend ? undefined : "8h 48m",
-      notes: isWeekend ? "Weekend" : "Regular check-in",
-    });
-  });
-
   return records;
 };
+
 
 export const MOCK_LEAVE_BALANCES: LeaveBalance[] = [
   { leaveType: "annual", allocated: 12, used: 8 },
