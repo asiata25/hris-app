@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
+import TeamDirectory from "@/features/team/TeamDirectory";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -115,16 +116,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "team",
-        element: (
-          <div className="space-y-6 animate-fadeIn">
-            <h2 className="text-2xl font-bold font-display text-ink">Team Directory</h2>
-            <Card>
-              <p className="text-ink-muted font-body text-sm">
-                Team screen directory interface — coming soon in Phase 1.
-              </p>
-            </Card>
-          </div>
-        ),
+        element: <TeamDirectory />,
       },
       {
         path: "attendance",

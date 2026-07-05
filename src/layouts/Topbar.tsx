@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Moon, Search, Sun } from "lucide-react";
+import { Bell, ChevronDown, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Topbar() {
@@ -31,18 +31,6 @@ export function Topbar() {
         <h1 className="font-display font-bold text-lg text-ink hidden sm:block">
           Employee Management App
         </h1>
-
-        {/* Search Bar */}
-        <div className="relative max-w-md w-full">
-          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4.5 w-4.5 text-ink-muted" />
-          </span>
-          <input
-            type="text"
-            placeholder="Search employees, documents, requests..."
-            className="w-full pl-10 pr-4 py-2 bg-surface text-ink text-sm rounded-sm border border-ink-muted/15 focus:outline-none focus:ring-1.5 focus:ring-accent/50 focus:border-accent transition-all font-body"
-          />
-        </div>
       </div>
 
       {/* Utility Actions */}

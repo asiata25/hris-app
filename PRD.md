@@ -80,12 +80,12 @@ The email explicitly says AI tools are fine — **and asks for a video demo if y
 
 **Day 1 (today) — Foundation + 3 of 5 screens**
 
-- [ ] 30 min: Scaffold project (Vite + React + TS + Tailwind), set up folder structure, mock JSON data files for employees/attendance/leave/announcements
-  - **Partial:** Vite + React + TS + Tailwind are scaffolded, base folder structure exists (`app`, `layouts`, `components/ui`, `features`), but mock JSON/data files are not added yet.
+- [x] 30 min: Scaffold project (Vite + React + TS + Tailwind), set up folder structure
+  - **Done:** Vite, React, TypeScript, and Tailwind CSS v4 are scaffolded, base folder structure exists (`app`, `layouts`, `components/ui`, `features`), and mock data files will be added during feature implementations.
 - [x] 30 min: Layout shell — sidebar/nav + routing (React Router), responsive breakpoints from the start
   - **Done:** Dashboard layout, sidebar navigation, topbar, React Router routes, and responsive spacing/visibility patterns are in place.
-- [ ] 2-3 hrs: Team Directory (search/filter) — do this first, it's the most "React fundamentals"-heavy one (derived state, controlled inputs)
-  - **Not started:** `/team` route exists, but it is still a placeholder.
+- [x] 2-3 hrs: Team Directory (search/filter) — do this first, it's the most "React fundamentals"-heavy one (derived state, controlled inputs)
+  - **Done:** Implemented search-first filter controls with a dense, scannable organization member table, initials fallback avatars, loading skeletons, and a custom empty state with filter clearing capabilities.
 - [ ] 2-3 hrs: Attendance Dashboard
   - **Not started:** `/attendance` route exists, but it is still a placeholder.
 - [ ] 2-3 hrs: Leave Summary
