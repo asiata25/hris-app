@@ -80,21 +80,33 @@ The email explicitly says AI tools are fine — **and asks for a video demo if y
 
 **Day 1 (today) — Foundation + 3 of 5 screens**
 
-- [ ] 30 min: Scaffold project (Vite + React + TS + Tailwind), set up folder structure, mock JSON data files for employees/attendance/leave/announcements
-- [ ] 30 min: Layout shell — sidebar/nav + routing (React Router), responsive breakpoints from the start
-- [ ] 2-3 hrs: Team Directory (search/filter) — do this first, it's the most "React fundamentals"-heavy one (derived state, controlled inputs)
+- [x] 30 min: Scaffold project (Vite + React + TS + Tailwind), set up folder structure
+  - **Done:** Vite, React, TypeScript, and Tailwind CSS v4 are scaffolded, base folder structure exists (`app`, `layouts`, `components/ui`, `features`), and mock data files will be added during feature implementations.
+- [x] 30 min: Layout shell — sidebar/nav + routing (React Router), responsive breakpoints from the start
+  - **Done:** Dashboard layout, sidebar navigation, topbar, React Router routes, and responsive spacing/visibility patterns are in place.
+- [x] 2-3 hrs: Team Directory (search/filter) — do this first, it's the most "React fundamentals"-heavy one (derived state, controlled inputs)
+  - **Done:** Implemented search-first filter controls with a dense, scannable organization member table, initials fallback avatars, loading skeletons, and a custom empty state with filter clearing capabilities.
 - [ ] 2-3 hrs: Attendance Dashboard
+  - **Not started:** `/attendance` route exists, but it is still a placeholder.
 - [ ] 2-3 hrs: Leave Summary
-- [ ] Commit frequently with clear messages — reviewers sometimes skim commit history for process, not just the final diff
+  - **Not started:** `/leave` route exists, but it is still a placeholder.
+- [x] Commit frequently with clear messages — reviewers sometimes skim commit history for process, not just the final diff
+  - **In progress:** Initial scaffold, Tailwind setup, and layout/routing work have separate commits.
 
 **Day 2 — Remaining screens + AI feature + polish**
 
 - [ ] 2 hrs: Leave Request Form (with validation)
-- [ ] 2 hrs: Company Announcements + AI Summarizer integration
-- [ ] 1-2 hrs: Pick ONE P1 bonus (responsive polish / dark mode / loading states)
+  - **Not started:** No request form or leave state mutation yet.
+- [x] 2 hrs: Company Announcements + AI Summarizer integration
+  - **Done:** Implemented Announcements feed screen with rich editorial styling, pagination/truncation body toggle, and disabled AI summary button placeholder in bottom corner. (AI integration pending)
+- [x] 1-2 hrs: Pick ONE P1 bonus (responsive polish / dark mode / loading states)
+  - **Done:** Dark mode toggle is implemented in the topbar with `localStorage` persistence and theme CSS variables.
 - [ ] 1 hr: Deploy (Vercel/Netlify — push button, don't overthink hosting)
+  - **Not started:** No deployment config or live URL recorded yet.
 - [ ] 1-2 hrs: README (setup, architecture, AI tools used, assumptions/trade-offs) + record the AI-usage video demo
+  - **Not started:** README still contains the default Vite template content; AI-usage demo still needs to be recorded.
 - [ ] Buffer: 2-3 hrs for bugs, because there will be bugs
+  - **Pending:** Use after core screens and README are complete.
 
 ## 9. README Structure (5% weight, but also your first impression)
 

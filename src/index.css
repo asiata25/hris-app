@@ -1,1 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-status-present: var(--status-present);
+  --color-status-absent: var(--status-absent);
+  --color-status-pending: var(--status-pending);
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  --radius-sm: 0.5rem;   /* 8px */
+  --radius-md: 0.75rem;  /* 12px */
+  --radius-lg: 1rem;     /* 16px */
+
+  --animate-fadeIn: fadeIn 0.2s ease-out;
+  --animate-scaleUp: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+/* Custom variant to support manual dark mode class toggling */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light Theme (Default) */
+:root {
+  --surface: #F8FAFC;
+  --surface-raised: #FFFFFF;
+  --accent: #4F7CFF;
+  --accent-muted: #E0E7FF;
+  --ink: #0F1115;
+  --ink-muted: #64748B;
+  --status-present: #10B981;
+  --status-absent: #EF4444;
+  --status-pending: #F59E0B;
+}
+
+/* Dark Theme (Class-based override) */
+.dark {
+  --surface: #0F1115;
+  --surface-raised: #171A21;
+  --accent: #4F7CFF;
+  --accent-muted: #2A3B66;
+  --ink: #E7E9EE;
+  --ink-muted: #8B90A0;
+  --status-present: #3DD68C;
+  --status-absent: #FF6B6B;
+  --status-pending: #F4B740;
+}
