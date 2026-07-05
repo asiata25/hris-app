@@ -57,16 +57,16 @@ export function Topbar() {
         <div className="flex items-center gap-3 pl-1.5 select-none cursor-pointer group">
           {/* Avatar */}
           <div className="w-9 h-9 rounded-full bg-accent/15 text-accent flex items-center justify-center font-bold text-sm border border-accent/20 transition-transform group-hover:scale-105">
-            LK
+            JK
           </div>
 
           {/* User Meta (hidden on mobile) */}
           <div className="hidden md:flex flex-col text-left">
             <span className="font-body font-semibold text-sm text-ink group-hover:text-accent transition-colors leading-none">
-              Lutfi Khoir
+              Johannes Kepler
             </span>
             <span className="font-body text-xs text-ink-muted leading-tight mt-0.5">
-              Administrator
+              Engineering Lead
             </span>
           </div>
 

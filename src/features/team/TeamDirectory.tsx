@@ -3,11 +3,12 @@ import { Search, FilterX } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { mockEmployees } from "./mockData";
+import { getEmployeesFromDb } from "@/lib/mockDb";
 import type { FilterState } from "@/types";
 import { cn } from "@/lib/cn";
 
 export default function TeamDirectory() {
+  const mockEmployees = useMemo(() => getEmployeesFromDb(), []);
   const [filters, setFilters] = useState<FilterState>({
     searchQuery: "",
     department: "",

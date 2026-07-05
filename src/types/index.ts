@@ -14,3 +14,17 @@ export interface FilterState {
   role: string;
   status: string;
 }
+
+export type AttendanceStatus = "present" | "absent" | "pending";
+
+export interface AttendanceRecord {
+  id: string;
+  employeeId: string;
+  date: string; // YYYY-MM-DD
+  status: AttendanceStatus;
+  checkIn?: string; // e.g., "09:00 AM"
+  checkOut?: string; // e.g., "05:30 PM"
+  workHours?: string; // e.g., "8h 30m"
+  notes?: string;
+}
+
