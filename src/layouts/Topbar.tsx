@@ -1,7 +1,12 @@
-import { Bell, ChevronDown, Moon, Sun } from "lucide-react";
+import { Bell, ChevronDown, Moon, Sun, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function Topbar() {
+interface TopbarProps {
+  onToggleSidebar: () => void;
+  isSidebarCollapsed: boolean;
+}
+
+export function Topbar({ onToggleSidebar, isSidebarCollapsed }: TopbarProps) {
   // Dark mode state management
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
@@ -27,7 +32,17 @@ export function Topbar() {
   return (
     <header className="h-16 bg-surface-raised border-b border-ink-muted/15 px-6 flex items-center justify-between transition-all duration-200">
       {/* Title & Search Section */}
-      <div className="flex items-center gap-8 flex-1">
+      <div className="flex items-center gap-3 flex-1">
+        {/* Sidebar Toggle Button */}
+        <button
+          onClick={onToggleSidebar}
+          className="p-2 -ml-2 text-ink-muted hover:text-ink hover:bg-surface rounded-sm transition-all duration-200 cursor-pointer"
+          aria-label={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+          title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
         <h1 className="font-display font-bold text-lg text-ink hidden sm:block">
           Employee Management App
         </h1>

@@ -4,7 +4,6 @@ import TeamDirectory from "@/features/team/TeamDirectory";
 import AttendanceDashboard from "@/features/attendance/AttendanceDashboard";
 import LeaveDashboard from "@/features/leave/LeaveDashboard";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Users, CheckCircle2, AlertCircle } from "lucide-react";
 import { getEmployeesFromDb, getAttendanceFromDb } from "@/lib/mockDb";
@@ -21,7 +20,7 @@ function HomeDashboard() {
       setAttendance(getAttendanceFromDb());
     };
     window.addEventListener("storage", syncState);
-    
+
     // Periodically sync in case other actions trigger updates within the same window
     const timer = setInterval(syncState, 1000);
 
@@ -32,25 +31,30 @@ function HomeDashboard() {
   }, []);
 
   const stats = useMemo(() => {
-    const activeEmployees = employees.filter(e => e.status !== "inactive");
-    const todayRecords = attendance.filter(r => r.date === "2026-07-05");
-    const presentCount = todayRecords.filter(r => r.status === "present").length;
-    const leaveCount = todayRecords.filter(r => r.status === "pending").length;
+    const activeEmployees = employees.filter((e) => e.status !== "inactive");
+    const todayRecords = attendance.filter((r) => r.date === "2026-07-05");
+    const presentCount = todayRecords.filter(
+      (r) => r.status === "present",
+    ).length;
+    const leaveCount = todayRecords.filter(
+      (r) => r.status === "pending",
+    ).length;
 
     // Remaining active employees who haven't checked in yet today (like Johannes Kepler before check-in)
     const activeCount = activeEmployees.length;
     const checkedInCount = todayRecords.length;
     const pendingCheckInCount = Math.max(0, activeCount - checkedInCount);
 
-    const rate = activeCount > 0 
-      ? Math.round((presentCount / activeCount) * 100) 
-      : 0;
+    const rate =
+      activeCount > 0 ? Math.round((presentCount / activeCount) * 100) : 0;
 
     return {
       totalEmployees: employees.length,
       attendanceRate: rate,
       pendingLeaves: leaveCount,
-      absentCount: todayRecords.filter(r => r.status === "absent").length + pendingCheckInCount,
+      absentCount:
+        todayRecords.filter((r) => r.status === "absent").length +
+        pendingCheckInCount,
     };
   }, [employees, attendance]);
 
@@ -73,8 +77,12 @@ function HomeDashboard() {
             <Users className="w-6 h-6" />
           </div>
           <div>
-            <div className="text-2xl font-display font-bold text-ink">{stats.totalEmployees}</div>
-            <div className="text-xs text-ink-muted font-body font-medium">Total Employees</div>
+            <div className="text-2xl font-display font-bold text-ink">
+              {stats.totalEmployees}
+            </div>
+            <div className="text-xs text-ink-muted font-body font-medium">
+              Total Employees
+            </div>
           </div>
         </Card>
 
@@ -83,9 +91,14 @@ function HomeDashboard() {
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <div className="text-2xl font-display font-bold text-ink">{stats.attendanceRate}%</div>
+            <div className="text-2xl font-display font-bold text-ink">
+              {stats.attendanceRate}%
+            </div>
             <div className="text-xs text-ink-muted font-body font-medium flex items-center gap-1.5">
-              Attendance Rate <Badge variant="present" className="ml-1.5 px-1 py-0 text-[10px]">On Track</Badge>
+              Attendance Rate{" "}
+              <Badge variant="present" className="ml-1.5 px-1 py-0 text-[10px]">
+                On Track
+              </Badge>
             </div>
           </div>
         </Card>
@@ -95,9 +108,14 @@ function HomeDashboard() {
             <AlertCircle className="w-6 h-6" />
           </div>
           <div>
-            <div className="text-2xl font-display font-bold text-ink">{stats.pendingLeaves}</div>
+            <div className="text-2xl font-display font-bold text-ink">
+              {stats.pendingLeaves}
+            </div>
             <div className="text-xs text-ink-muted font-body font-medium flex items-center gap-1.5">
-              Pending Leave Requests <Badge variant="pending" className="ml-1.5 px-1 py-0 text-[10px]">Urgent</Badge>
+              Pending Leave Requests{" "}
+              <Badge variant="pending" className="ml-1.5 px-1 py-0 text-[10px]">
+                Urgent
+              </Badge>
             </div>
           </div>
         </Card>
@@ -105,28 +123,6 @@ function HomeDashboard() {
 
       {/* Quick Actions & Elements Showcase */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Primary, Secondary, Ghost Button Showcase */}
-        <Card className="lg:col-span-2 space-y-4">
-          <h3 className="font-display font-bold text-base text-ink">
-            Quick Actions (UI Primitives Showcase)
-          </h3>
-          <p className="text-xs text-ink-muted font-body">
-            Demonstrating the token-driven variants of our custom `Button` component:
-          </p>
-
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button variant="primary">Primary Button</Button>
-            <Button variant="secondary">Secondary Button</Button>
-            <Button variant="ghost">Ghost Button</Button>
-          </div>
-
-          <div className="flex flex-wrap gap-3 pt-1">
-            <Button variant="primary" size="sm">Small Primary</Button>
-            <Button variant="secondary" size="sm">Small Secondary</Button>
-            <Button variant="ghost" size="sm">Small Ghost</Button>
-          </div>
-        </Card>
-
         {/* Status Badge Showcase */}
         <Card className="space-y-4">
           <h3 className="font-display font-bold text-base text-ink">
@@ -181,15 +177,18 @@ export const router = createBrowserRouter([
         path: "*",
         element: (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold font-display text-ink">Page Not Found</h2>
+            <h2 className="text-2xl font-bold font-display text-ink">
+              Page Not Found
+            </h2>
             <Card>
               <p className="text-ink-muted font-body text-sm">
-                The requested URL path was not recognized. Please use the sidebar to navigate.
+                The requested URL path was not recognized. Please use the
+                sidebar to navigate.
               </p>
             </Card>
           </div>
-        )
-      }
+        ),
+      },
     ],
   },
 ]);

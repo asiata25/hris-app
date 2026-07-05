@@ -2,7 +2,13 @@ import { NavLink } from "react-router";
 import { LayoutDashboard, Users, Clock, CalendarDays, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-export function Sidebar() {
+interface SidebarProps {
+  isCollapsed: boolean;
+  isMobileOpen: boolean;
+  onCloseMobile: () => void;
+}
+
+export function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: SidebarProps) {
   const navItems = [
     { name: "Home", to: "/", icon: LayoutDashboard },
     { name: "Team", to: "/team", icon: Users },
@@ -11,28 +17,51 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 h-full bg-surface-raised border-r border-ink-muted/15 flex flex-col transition-all duration-200">
+    <aside
+      className={cn(
+        "fixed inset-y-0 left-0 z-40 bg-surface-raised border-r border-ink-muted/15 flex flex-col transition-all duration-200 md:relative md:translate-x-0 shrink-0 w-64",
+        isCollapsed && "md:w-20",
+        isMobileOpen ? "translate-x-0" : "-translate-x-full"
+      )}
+    >
       {/* Brand logo section */}
-      <div className="h-16 px-6 flex items-center gap-3 border-b border-ink-muted/10">
-        <div className="w-9 h-9 rounded-sm bg-accent flex items-center justify-center text-white font-display font-bold shadow-md shadow-accent/20">
+      <div
+        className={cn(
+          "h-16 flex items-center border-b border-ink-muted/10 transition-all duration-200 shrink-0 px-6 gap-3",
+          isCollapsed && "md:px-0 md:justify-center"
+        )}
+      >
+        <div className="w-9 h-9 rounded-sm bg-accent flex items-center justify-center text-white font-display font-bold shadow-md shadow-accent/20 shrink-0">
           LL
         </div>
-        <span className="font-display font-bold text-xl text-ink tracking-tight">
+        <span
+          className={cn(
+            "font-display font-bold text-xl text-ink tracking-tight whitespace-nowrap animate-fadeIn transition-opacity duration-200",
+            isCollapsed ? "md:hidden" : "block"
+          )}
+        >
           Labourlink
         </span>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
+      <nav
+        className={cn(
+          "flex-1 py-6 px-4 space-y-1 overflow-y-auto",
+          isCollapsed && "md:overflow-visible"
+        )}
+      >
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={() => isMobileOpen && onCloseMobile()}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3.5 px-4 py-3 rounded-sm text-sm font-medium transition-all duration-200 font-body cursor-pointer relative group",
+                  "flex items-center rounded-sm text-sm font-medium transition-all duration-200 font-body cursor-pointer relative group gap-3.5 px-4 py-3",
+                  isCollapsed && "md:justify-center md:p-3",
                   isActive
                     ? "bg-accent/10 text-accent font-semibold"
                     : "text-ink-muted hover:bg-surface/50 hover:text-ink"
@@ -43,13 +72,27 @@ export function Sidebar() {
                 <>
                   <Icon
                     className={cn(
-                      "w-5 h-5 transition-transform duration-200 group-hover:scale-105",
+                      "w-5 h-5 transition-transform duration-200 group-hover:scale-105 shrink-0",
                       isActive ? "text-accent" : "text-ink-muted group-hover:text-ink"
                     )}
                   />
-                  <span>{item.name}</span>
+                  <span
+                    className={cn(
+                      "whitespace-nowrap animate-fadeIn transition-opacity duration-200",
+                      isCollapsed ? "md:hidden" : "block"
+                    )}
+                  >
+                    {item.name}
+                  </span>
                   {isActive && (
                     <div className="absolute right-0 top-1/4 bottom-1/4 w-1 rounded-l bg-accent" />
+                  )}
+                  
+                  {/* Premium tooltip when collapsed */}
+                  {isCollapsed && (
+                    <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-ink text-surface-raised text-xs font-semibold rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap z-50 shadow-lg border border-ink-muted/10 hidden md:block">
+                      {item.name}
+                    </div>
                   )}
                 </>
               )}
@@ -59,12 +102,23 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom info banner */}
-      <div className="p-4 border-t border-ink-muted/10 bg-surface/20">
-        <div className="flex items-center gap-2.5 text-xs text-ink-muted font-body">
-          <ShieldAlert className="w-4 h-4 text-accent" />
-          <span>Internal HR Portal</span>
-        </div>
+      <div
+        className={cn(
+          "p-4 border-t border-ink-muted/10 bg-surface/20 flex shrink-0 transition-all duration-200 items-center gap-2.5",
+          isCollapsed && "md:justify-center"
+        )}
+      >
+        <ShieldAlert className="w-4 h-4 text-accent shrink-0" />
+        <span
+          className={cn(
+            "text-xs text-ink-muted font-body whitespace-nowrap animate-fadeIn transition-opacity duration-200",
+            isCollapsed ? "md:hidden" : "block"
+          )}
+        >
+          Internal HR Portal
+        </span>
       </div>
     </aside>
   );
 }
+
