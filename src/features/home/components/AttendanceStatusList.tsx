@@ -11,7 +11,7 @@ const TODAY_DATE = "2026-07-05";
 export function AttendanceStatusList() {
   const [employees] = useState<Employee[]>(() => getEmployeesFromDb());
   const [attendance, setAttendance] = useState<AttendanceRecord[]>(() =>
-    getAttendanceFromDb()
+    getAttendanceFromDb(),
   );
 
   useEffect(() => {
@@ -30,12 +30,14 @@ export function AttendanceStatusList() {
 
   const getStatusInfo = (emp: Employee) => {
     const record = attendance.find(
-      (r) => r.employeeId === emp.id && r.date === TODAY_DATE
+      (r) => r.employeeId === emp.id && r.date === TODAY_DATE,
     );
 
     if (record) {
-      if (record.status === "present") return { variant: "present" as const, label: "Present" };
-      if (record.status === "pending") return { variant: "pending" as const, label: "On Leave" };
+      if (record.status === "present")
+        return { variant: "present" as const, label: "Present" };
+      if (record.status === "pending")
+        return { variant: "pending" as const, label: "On Leave" };
       return { variant: "absent" as const, label: "Absent" };
     }
 
@@ -48,7 +50,7 @@ export function AttendanceStatusList() {
   };
 
   return (
-    <Card className="space-y-4 max-h-[360px] flex flex-col">
+    <Card className="space-y-4 max-h-90 flex flex-col">
       <div className="shrink-0">
         <SectionHeader>Today's Attendance Statuses</SectionHeader>
         <p className="text-xs text-ink-muted font-body mt-1">
@@ -70,9 +72,7 @@ export function AttendanceStatusList() {
                   <span className="text-sm font-semibold text-ink leading-tight">
                     {emp.name}
                   </span>
-                  <span className="text-[11px] text-ink-muted">
-                    {emp.role}
-                  </span>
+                  <span className="text-[11px] text-ink-muted">{emp.role}</span>
                 </div>
               </div>
               <Badge variant={status.variant}>{status.label}</Badge>

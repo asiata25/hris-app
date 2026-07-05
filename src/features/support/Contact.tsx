@@ -70,10 +70,6 @@ export default function Contact() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
         {/* Contact Channels */}
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-xs font-semibold text-ink-muted uppercase tracking-wider block px-1 select-none">
-            Support Departments
-          </h3>
-
           {contactChannels.map((channel) => (
             <SupportDirectoryCard
               key={channel.title}
