@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { LayoutDashboard, Users, Clock, CalendarDays, ShieldAlert, FileText, Mail, Bug } from "lucide-react";
+import { LayoutDashboard, Users, Clock, CalendarDays, Megaphone, ShieldAlert, FileText, Mail, Bug } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 interface SidebarProps {
@@ -14,6 +14,7 @@ export function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }: SidebarPro
     { name: "Team", to: "/team", icon: Users },
     { name: "Attendance", to: "/attendance", icon: Clock },
     { name: "Leave", to: "/leave", icon: CalendarDays },
+    { name: "Announcements", to: "/announcements", icon: Megaphone },
   ];
 
   const footerItems = [

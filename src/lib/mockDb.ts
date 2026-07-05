@@ -1,4 +1,4 @@
-import type { Employee, AttendanceRecord, AttendanceStatus, LeaveBalance, LeaveRequest } from "@/types";
+import type { Employee, AttendanceRecord, AttendanceStatus, LeaveBalance, LeaveRequest, Announcement } from "@/types";
 
 export const MOCK_EMPLOYEES: Employee[] = [
   {
@@ -288,6 +288,49 @@ export const MOCK_LEAVE_REQUESTS: LeaveRequest[] = [
   },
 ];
 
+export const MOCK_ANNOUNCEMENTS: Announcement[] = [
+  {
+    id: "ann_1",
+    title: "Q3 Hackathon: Building the Future of HR Tech",
+    date: "2026-07-05",
+    body: "We are thrilled to announce our upcoming Q3 Hackathon! This quarter, our theme is 'Building the Future of HR Tech'. Whether you're an engineer, designer, product manager, or HR specialist, we want your creative ideas. The event will kick off on July 20th and run for 48 hours. Team registrations are open starting today. Great prizes, custom swag, and plenty of pizza/coffee are guaranteed. Start brainstorming and finding your team members!",
+    authorId: "1",
+    category: "Engineering"
+  },
+  {
+    id: "ann_2",
+    title: "Annual Company Picnic & Team Building Details",
+    date: "2026-07-01",
+    body: "It's that time of the year again! Our Annual Company Picnic is scheduled for Saturday, July 18th at Golden Gate Park. We'll have catered BBQ (including vegan/vegetarian options), outdoor games, team building challenges, and a raffle draw. Families are welcome to join. Please RSVP on the portal by July 10th so we can finalize the food and beverage counts. We hope to see everyone there!",
+    authorId: "7",
+    category: "Social"
+  },
+  {
+    id: "ann_3",
+    title: "Important Security Update: Mandatory 2FA Enrollment",
+    date: "2026-06-28",
+    body: "To keep our company data and client information secure, we are mandating Two-Factor Authentication (2FA) for all internal accounts. Starting next Monday, July 6th, you will be prompted to set up 2FA via Google Authenticator or your preferred authenticator app upon logging in. Please complete this setup as soon as possible. If you experience any issues or need assistance, feel free to contact the IT Support team.",
+    authorId: "5",
+    category: "Security"
+  },
+  {
+    id: "ann_4",
+    title: "New Remote Work Reimbursement Guidelines",
+    date: "2026-06-20",
+    body: "We are updating our remote work reimbursement guidelines to better support our hybrid team. Starting next month, all full-time employees are eligible for a monthly home office stipend of up to $100 to cover internet and utility expenses. Additionally, a one-time equipment allowance of up to $500 is available for ergonomic chairs, monitors, or keyboards. Please review the updated policy document on the wiki for details on how to submit claims.",
+    authorId: "7",
+    category: "Policy"
+  },
+  {
+    id: "ann_5",
+    title: "Welcoming Sarah Jenkins as Our New Chief Product Officer",
+    date: "2026-06-15",
+    body: "We are excited to welcome Sarah Jenkins to the Labourlink team as our new Chief Product Officer (CPO), effective today! Sarah brings over 15 years of product management experience in SaaS and HR technologies, most recently leading the product division at TalentCorp. She will be overseeing our product strategy, design, and roadmap. Please join us in welcoming Sarah during our town hall meeting this Thursday!",
+    authorId: "7",
+    category: "Company"
+  }
+];
+
 // Seeding function
 export const initializeDb = () => {
   if (typeof window === "undefined") return;
@@ -303,6 +346,9 @@ export const initializeDb = () => {
   }
   if (!localStorage.getItem("leaveRequests")) {
     localStorage.setItem("leaveRequests", JSON.stringify(MOCK_LEAVE_REQUESTS));
+  }
+  if (!localStorage.getItem("announcements")) {
+    localStorage.setItem("announcements", JSON.stringify(MOCK_ANNOUNCEMENTS));
   }
 };
 
@@ -413,10 +459,25 @@ export const saveLeaveRequestsToDb = (requests: LeaveRequest[]) => {
   localStorage.setItem("leaveBalances", JSON.stringify(updatedBalances));
 };
 
+export const getAnnouncementsFromDb = (): Announcement[] => {
+  initializeDb();
+  const data = localStorage.getItem("announcements");
+  if (data) {
+    const list = JSON.parse(data) as Announcement[];
+    if (list.length > 0 && !list[0].authorId) {
+      localStorage.setItem("announcements", JSON.stringify(MOCK_ANNOUNCEMENTS));
+      return MOCK_ANNOUNCEMENTS;
+    }
+    return list;
+  }
+  return MOCK_ANNOUNCEMENTS;
+};
+
 export const resetDb = () => {
   localStorage.removeItem("employees");
   localStorage.removeItem("attendance");
   localStorage.removeItem("leaveBalances");
   localStorage.removeItem("leaveRequests");
+  localStorage.removeItem("announcements");
   initializeDb();
 };

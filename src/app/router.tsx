@@ -5,6 +5,8 @@ import TeamDirectory from "@/features/team/TeamDirectory";
 import AttendanceDashboard from "@/features/attendance/AttendanceDashboard";
 import LeaveDashboard from "@/features/leave/LeaveDashboard";
 import NewLeaveRequest from "@/features/leave/NewLeaveRequest";
+import AnnouncementsFeed from "@/features/announcements/AnnouncementsFeed";
+import AnnouncementDetails from "@/features/announcements/AnnouncementDetails";
 import PrivacyTerms from "@/features/support/PrivacyTerms";
 import Contact from "@/features/support/Contact";
 import ReportBug from "@/features/support/ReportBug";
@@ -40,6 +42,20 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "announcements",
+        children: [
+          {
+            index: true,
+            element: <AnnouncementsFeed />,
+          },
+          {
+            path: ":id",
+            element: <AnnouncementDetails />,
+          },
+        ],
+      },
+
       {
         path: "privacy-terms",
         element: <PrivacyTerms />,

@@ -47,4 +47,14 @@ export interface LeaveRequest {
   createdAt: string;
 }
 
+export interface Announcement {
+  id: string;
+  title: string;
+  body: string;
+  date: string; // YYYY-MM-DD
+  authorId: string; // Employee ID of the PIC
+  category: string; // e.g. "Engineering", "Social", "Security", "Policy", "Company"
+}
+
+
 

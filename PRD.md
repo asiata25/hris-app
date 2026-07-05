@@ -97,8 +97,8 @@ The email explicitly says AI tools are fine — **and asks for a video demo if y
 
 - [ ] 2 hrs: Leave Request Form (with validation)
   - **Not started:** No request form or leave state mutation yet.
-- [ ] 2 hrs: Company Announcements + AI Summarizer integration
-  - **Not started:** No announcements route/data or summarizer UI yet.
+- [x] 2 hrs: Company Announcements + AI Summarizer integration
+  - **Done:** Implemented Announcements feed screen with rich editorial styling, pagination/truncation body toggle, and disabled AI summary button placeholder in bottom corner. (AI integration pending)
 - [x] 1-2 hrs: Pick ONE P1 bonus (responsive polish / dark mode / loading states)
   - **Done:** Dark mode toggle is implemented in the topbar with `localStorage` persistence and theme CSS variables.
 - [ ] 1 hr: Deploy (Vercel/Netlify — push button, don't overthink hosting)
