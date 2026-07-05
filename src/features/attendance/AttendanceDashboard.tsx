@@ -2,27 +2,29 @@ import { useEffect, useState, useMemo } from "react";
 import { RefreshCw } from "lucide-react";
 import {
   getEmployeesFromDb,
-  getAttendanceFromDb,
-  checkInUser,
-  checkOutUser,
   resetDb,
   CURRENT_USER_ID,
 } from "@/lib/mockDb";
-import type { AttendanceRecord, Employee } from "@/types";
+import type { Employee } from "@/types";
 import { cn } from "@/lib/cn";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { AttendanceStats } from "./components/AttendanceStats";
 import { LiveShiftConsole } from "./components/LiveShiftConsole";
 import { TeamHistoryTable } from "./components/TeamHistoryTable";
 import { PersonalHistoryTable } from "./components/PersonalHistoryTable";
-import { formatCurrentTime, calculateWorkHours } from "@/utils/helpers";
+import { useAttendance } from "@/hooks/useAttendance";
 
 export default function AttendanceDashboard() {
   const [viewMode, setViewMode] = useState<"team" | "personal">("personal");
   const [employees] = useState<Employee[]>(() => getEmployeesFromDb());
-  const [attendance, setAttendance] = useState<AttendanceRecord[]>(() =>
-    getAttendanceFromDb()
-  );
+  const {
+    attendance,
+    todayRecord: currentUserTodayRecord,
+    checkInState,
+    checkIn: handleCheckIn,
+    checkOut: handleCheckOut,
+    triggerUpdate,
+  } = useAttendance();
 
   // Filter States (Team View)
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,43 +43,10 @@ export default function AttendanceDashboard() {
   // Today's Date Configuration
   const TODAY_DATE = "2026-07-05";
 
-  // Current User's Attendance status for today
-  const currentUserTodayRecord = useMemo(() => {
-    return attendance.find(
-      (r) => r.employeeId === CURRENT_USER_ID && r.date === TODAY_DATE
-    );
-  }, [attendance]);
-
-  const checkInState = useMemo(() => {
-    if (!currentUserTodayRecord) return "idle"; // not checked in
-    if (currentUserTodayRecord.checkIn && !currentUserTodayRecord.checkOut)
-      return "checked_in";
-    return "checked_out";
-  }, [currentUserTodayRecord]);
-
-  // Handle Check-in Action
-  const handleCheckIn = () => {
-    const checkInTime = formatCurrentTime();
-    checkInUser(TODAY_DATE, checkInTime);
-    setAttendance(getAttendanceFromDb());
-  };
-
-  // Handle Check-out Action
-  const handleCheckOut = () => {
-    if (!currentUserTodayRecord?.checkIn) return;
-    const checkOutTime = formatCurrentTime();
-    const workHours = calculateWorkHours(
-      currentUserTodayRecord.checkIn,
-      checkOutTime
-    );
-    checkOutUser(TODAY_DATE, checkOutTime, workHours);
-    setAttendance(getAttendanceFromDb());
-  };
-
   // Reset db helper for demo purposes
   const handleResetDb = () => {
     resetDb();
-    setAttendance(getAttendanceFromDb());
+    triggerUpdate();
   };
 
   // Unique departments for filter dropdown

@@ -50,7 +50,7 @@ export function AttendanceStatusList() {
   };
 
   return (
-    <Card className="space-y-4 max-h-90 flex flex-col">
+    <Card className="space-y-4 h-95 flex flex-col">
       <div className="shrink-0">
         <SectionHeader>Today's Attendance Statuses</SectionHeader>
         <p className="text-xs text-ink-muted font-body mt-1">
@@ -58,7 +58,7 @@ export function AttendanceStatusList() {
         </p>
       </div>
 
-      <ul className="space-y-3 overflow-y-auto pr-1 flex-1">
+      <ul className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-0">
         {activeEmployees.map((emp) => {
           const status = getStatusInfo(emp);
           return (
